@@ -3,7 +3,12 @@ import authMiddleware from '../../middleware/auth.middleware.js';
 import roleGuard from '../../middleware/role.middleware.js';
 import validate from '../../middleware/validate.middleware.js';
 import { ROLES } from '../../common/constants/roles.js';
-import { createUserSchema, updateUserSchema, updateProfileSchema, userIdSchema } from './user.validator.js';
+import {
+  createUserSchema,
+  updateUserSchema,
+  updateProfileSchema,
+  userIdSchema,
+} from './user.validator.js';
 
 const router = Router();
 
@@ -13,11 +18,7 @@ const router = Router();
  */
 const userRoutes = (userController) => {
   // Get own profile
-  router.get(
-    '/me',
-    authMiddleware,
-    userController.getOwnProfile.bind(userController)
-  );
+  router.get('/me', authMiddleware, userController.getOwnProfile.bind(userController));
 
   // Update own profile
   router.put(
@@ -34,7 +35,12 @@ const userRoutes = (userController) => {
     roleGuard([ROLES.ADMIN]),
     userController.getAllUsers.bind(userController)
   );
-
+  router.get(
+    '/count',
+    authMiddleware,
+    roleGuard([ROLES.ADMIN]),
+    userController.countUser.bind(userController)
+  );
   // ADMIN ONLY: Create user
   router.post(
     '/',

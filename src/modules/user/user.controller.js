@@ -13,21 +13,30 @@ class UserController {
       const { users, total, limit, page, ...additionalMeta } =
         await this.userService.getAllUsers(paginationParams);
 
-      res.status(200).json(
-        ApiResponse.pagination(
-          users,
-          'Users retrieved successfully',
-          total,
-          limit,
-          page,
-          additionalMeta
-        )
-      );
+      res
+        .status(200)
+        .json(
+          ApiResponse.pagination(
+            users,
+            'Users retrieved successfully',
+            total,
+            limit,
+            page,
+            additionalMeta
+          )
+        );
     } catch (error) {
       next(error);
     }
   }
-
+  async countUser(req, res, next) {
+    try {
+      const count = await this.userService.countUser();
+      res.status(200).json(ApiResponse.success(count));
+    } catch (error) {
+      next(error);
+    }
+  }
   async getUserById(req, res, next) {
     try {
       const user = await this.userService.getUserById(req.params.id);

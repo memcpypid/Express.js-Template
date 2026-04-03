@@ -17,6 +17,10 @@ class UserDTO {
     if (!user) return null;
     return new UserDTO(user);
   }
+  static countUser(count) {
+    if (!count) return 0;
+    return { count: count };
+  }
 
   static fromUsers(users) {
     if (!users || !Array.isArray(users)) return [];

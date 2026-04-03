@@ -11,8 +11,15 @@ class UserService {
 
   async getAllUsers(options) {
     this.logger.info('Service: getAllUsers called');
-    const { page = 1, limit = 10, offset = 0, sort = 'desc', sortBy = 'created_at', search = '' } = options;
-    
+    const {
+      page = 1,
+      limit = 10,
+      offset = 0,
+      sort = 'desc',
+      sortBy = 'created_at',
+      search = '',
+    } = options;
+
     const where = {};
     if (search) {
       where[Op.or] = [
@@ -38,7 +45,12 @@ class UserService {
       search,
     };
   }
-
+  async countUser() {
+    this.logger.info('Service: countUser called');
+    const counts = await this.userRepository.count();
+    if (counts == 0) throw new NotFoundError('User not found');
+    return UserDTO.countUser(counts);
+  }
   async getUserById(id) {
     this.logger.info('Service: getUserById called');
     const user = await this.userRepository.findByPk(id);
@@ -72,7 +84,7 @@ class UserService {
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }
-    
+
     const updatedUser = await user.update(data);
     return UserDTO.fromUser(updatedUser);
   }
