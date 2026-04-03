@@ -1,0 +1,8 @@
+const path = require('path');
+
+module.exports = {
+  config: path.resolve('src', 'config', 'database.cjs'),
+  'models-path': path.resolve('src', 'modules'), // Sequelize isn't strictly using this since we used custom init, but good for CLI
+  'seeders-path': path.resolve('src', 'database', 'seeders'),
+  'migrations-path': path.resolve('src', 'database', 'migrations'),
+};
